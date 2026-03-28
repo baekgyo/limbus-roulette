@@ -213,8 +213,9 @@ const sinnerData = {
 const bgm = document.getElementById('bgm');
 const muteBtn = document.getElementById('mute-btn');
 const volumeSlider = document.getElementById('volume-slider');
+let currentFilter = 'all'; // 기본값: 전체 인격
 
-// 1. 오디오 컨트롤 설정
+// 2. 오디오 컨트롤 설정
 volumeSlider.oninput = (e) => {
     bgm.volume = e.target.value;
 };
@@ -229,7 +230,7 @@ muteBtn.onclick = () => {
     }
 };
 
-// 2. START 버튼 클릭 시 음악 시작 및 화면 전환
+// 3. 메인 화면 -> 게임 화면 전환
 document.getElementById('start-btn').onclick = () => {
     bgm.play().catch(err => console.log("자동 재생 방지 대기 중"));
     document.getElementById('main-screen').classList.add('hidden');
@@ -237,7 +238,20 @@ document.getElementById('start-btn').onclick = () => {
     renderGrid(); 
 };
 
-// 3. 그리드 생성 및 룰렛 로직 (별 표시 포함)
+// 4. 필터 버튼 이벤트 (텍스트 수정 반영)
+document.getElementById('filter-all').onclick = function() { 
+    currentFilter = 'all'; 
+    this.classList.add('active'); 
+    document.getElementById('filter-3star').classList.remove('active'); 
+};
+
+document.getElementById('filter-3star').onclick = function() { 
+    currentFilter = '3star'; 
+    this.classList.add('active'); 
+    document.getElementById('filter-all').classList.remove('active'); 
+};
+
+// 5. 수감자 그리드 생성
 function renderGrid() {
     const grid = document.getElementById('sinner-grid');
     grid.innerHTML = '';
@@ -255,6 +269,7 @@ function renderGrid() {
     });
 }
 
+// 6. 룰렛 실행 로직 (1성 포함 수정 완료)
 document.getElementById('spin-all-btn').onclick = function() {
     this.disabled = true;
     let finished = 0;
@@ -264,8 +279,9 @@ document.getElementById('spin-all-btn').onclick = function() {
         const label = slot.nextElementSibling; 
         const starBox = document.getElementById(`stars-${s.id}`);
         
+        // 필터 로직: '3star'면 3성만, 'all'이면 전체(true)
         let list = sinnerData[s.name].filter(item => 
-            currentFilter === '3star' ? item.rank === 3 : item.rank >= 2
+            currentFilter === '3star' ? item.rank === 3 : true 
         );
 
         let count = 0;
@@ -280,19 +296,20 @@ document.getElementById('spin-all-btn').onclick = function() {
             if (++count > 15) {
                 clearInterval(timer);
                 finished++;
-                if (selected.rank === 3) label.style.textShadow = "0 0 8px #ffc400";
+                
+                // 3성 강조 효과
+                if (selected.rank === 3) {
+                    label.style.textShadow = "0 0 8px #ffc400";
+                    label.style.color = "#ffc400";
+                } else {
+                    label.style.textShadow = "none";
+                    label.style.color = "#fff";
+                }
+
                 if (finished === sinners.length) this.disabled = false;
             }
         }, 100);
     });
 };
 
-// 4. 필터 및 처음으로
-let currentFilter = 'all';
-document.getElementById('filter-all').onclick = function() { 
-    currentFilter = 'all'; this.classList.add('active'); document.getElementById('filter-3star').classList.remove('active'); 
-};
-document.getElementById('filter-3star').onclick = function() { 
-    currentFilter = '3star'; this.classList.add('active'); document.getElementById('filter-all').classList.remove('active'); 
-};
 document.getElementById('go-back').onclick = () => location.reload();
