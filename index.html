@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>림버스 컴퍼니 랜덤 인격 룰렛</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="audio-controls">
+        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+        <button id="mute-btn">🔊 ON</button>
+    </div>
+
+    <audio id="bgm" loop>
+        <source src="main_bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="main-screen" class="container">
+        <div class="main-window">
+            <div class="main-logo-area">
+                <h1 class="logo-line-1">LIMBUS COMPANY</h1>
+                <h2 class="logo-line-2">Random Roulette</h2>
+            </div>
+            <div class="start-box">
+                <button id="start-btn" class="main-start-btn">START</button>
+            </div>
+            <p class="system-msg">Connecting to Mephistopheles...</p>
+        </div>
+    </div>
+
+    <div id="game-screen" class="container hidden">
+        <div class="extract-window">
+            <h2 class="extract-title">랜덤 인격 룰렛</h2>
+            <div class="category-select">
+                <span id="filter-all" class="cat active">2성 포함</span>
+                <span class="sep">|</span>
+                <span id="filter-3star" class="cat">3성만</span>
+            </div>
+            <button id="spin-all-btn" class="extract-action-btn">추출 시작!</button>
+            <div id="sinner-grid" class="sinner-display"></div>
+            <button id="go-back" class="back-link">처음으로</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+<footer class="footer-info">
+        <p>본 사이트는 팬 메이드 프로젝트이며, 모든 게임 리소스의 권리는 Project Moon에 있습니다.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
